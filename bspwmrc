@@ -1,0 +1,72 @@
+#! /bin/sh
+
+pgrep -x sxhkd > /dev/null ||sxhkd & picom & xbacklight -set 15 & $HOME/.config/polybar/launch.sh
+
+feh --bg-fill /home/hermit/Pictures/wallpaper/1198901.jpg
+bspc monitor -d I II III
+
+bspc config border_width         2
+bspc config window_gap          12
+
+bspc config split_ratio          0.52
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+
+bspc rule -a Gimp desktop='^8' state=floating follow=on
+bspc rule -a Chromium desktop='^2'
+bspc rule -a mplayer2 state=floating
+bspc rule -a Kupfer.py focus=on
+bspc rule -a Screenkey manage=off
+bspc rule -a Subl3 desktop='^3'
+# bspc rule -a Thunar desktop='^4' state=pseudo_tiled
+bspc rule -a Thunar desktop='^4'
+bspc rule -a Thunar:Dialog state=floating center=true
+bspc rule -a TelegramDesktop desktop='^5' follow=on
+bspc rule -a discord desktop='^5' follow=on
+bspc rule -a Gimp-2.10 desktop='^6'
+bspc rule -a Inkscape desktop='^6'
+bspc rule -a kdenlive desktop='^6'
+bspc rule -a Audacious desktop='^7' state=floating follow=on focus=on
+bspc rule -a Zathura desktop='^7' state=tiled follow=on
+bspc rule -a '*:libreoffice' desktop='^8' state=tiled
+bspc rule -a '*:soffice' desktop='^8'
+bspc rule -a Gnome-chess desktop='^9'
+bspc rule -a teeworlds desktop='^9'
+bspc rule -a Steam desktop='^9' state=floating
+bspc rule -a "VirtualBox Manager" desktop='^10'
+
+bspc rule -a tilix:Newsboat state=floating center=on
+bspc rule -a tilix:Ranger state=floating center=on
+bspc rule -a tilix:Pacui state=floating center=on
+bspc rule -a tilix:Float state=floating
+bspc rule -a Gnome-calculator state=floating
+bspc rule -a Gpick state=floating
+bspc rule -a GParted state=floating
+bspc rule -a File-roller state=floating
+bspc rule -a Nitrogen state=floating
+bspc rule -a Lxappearance state=floating center=true
+bspc rule -a Lxrandr state=floating
+bspc rule -a Pavucontrol state=floating
+bspc rule -a Timeshift-gtk state=floating
+bspc rule -a qt5ct state=floating rectangle=700x470+0+0 center=on
+bspc rule -a SimpleScreenRecorder state=floating
+bspc rule -a Sxiv state=floating
+bspc rule -a Viewnior state=floating
+bspc rule -a SMPlayer state=floating
+bspc rule -a mpv state=floating sticky=on rectangle=300x180+1060+475
+
+bscp rule -a polybar manage=off
+bspc rule -a Tint2 border=off manage=off layer=above state=floating
+# bspc rule -a Mylaunchpad border=off manage=off
+bspc rule -a '*:Kunst' sticky=on layer=below border=off focus=off
+#bspc rule -a Sxiv:Kunst sticky=on layer=below border=off focus=off manage=off rect>
+
+# Set Desktop 7 to start with floating windows
+FLOATING_DESKTOP_ID=$(bspc query -D -d '^7')
+bspc subscribe node_manage | while read -a msg ; do
+        desk_id=${msg[2]}
+        wid=${msg[3]}
+        [ "$FLOATING_DESKTOP_ID" = "$desk_id" ] && bspc node "$wid" -t floating
+
+done
+
