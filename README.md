@@ -1,2 +1,2 @@
-# bspwm
+# dotfiles
 Configuracion bspwm 
